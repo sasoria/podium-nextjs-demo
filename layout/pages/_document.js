@@ -1,5 +1,6 @@
 import Document, { Html, Head, Main, NextScript } from "next/document";
 import Layout from "@podium/layout";
+import utils from "@podium/utils";
 
 const layout = new Layout({
   name: "Layout",
@@ -44,15 +45,22 @@ class MyDocument extends Document {
 
   render() {
     const podlets = this.props.podlets;
+
+    const css = podlets.map((podlet) => {
+      if (Object.keys(podlet.css).length !== 0) {
+        return utils.buildLinkElement(podlet.css[0]);
+      }
+    });
+
+    const js = podlets.map((podlet) => {
+      if (Object.keys(podlet.js).length !== 0) {
+        return utils.buildScriptElement(podlet.js[0]);
+      }
+    });
+
     return (
       <Html>
-        <Head>
-          <link
-            href={podlets[0].css[0].value}
-            type="text/css"
-            rel="stylesheet"
-          />
-        </Head>
+        <Head>{css}</Head>
         <body>
           <Main />
           <section>
@@ -61,8 +69,8 @@ class MyDocument extends Document {
             {podlets[1].content}
             {podlets[2].content}
           </section>
-          <script src={podlets[0].js[0].value} type="module"></script>
           <NextScript />
+          {js}
         </body>
       </Html>
     );
