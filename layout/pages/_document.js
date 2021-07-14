@@ -56,7 +56,7 @@ class MyDocument extends Document {
         <body>
           <Main />
           <section>
-            <div id="root"></div>
+            <div id="podlet-a"></div>
             {podlets[0].content}
             {podlets[1].content}
             {podlets[2].content}

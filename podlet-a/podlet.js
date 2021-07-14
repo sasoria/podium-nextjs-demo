@@ -20,7 +20,7 @@ app.use(podlet.middleware());
 
 app.get(podlet.content(), (req, res) => {
   res.status(200).podiumSend(`
-        <div id="root"></div>
+        <div id="podlet-a"></div>
     `);
 });
 
