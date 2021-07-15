@@ -34,11 +34,10 @@ const podletC = layout.client.register({
 class MyDocument extends Document {
   static async getInitialProps(ctx) {
     const initialProps = await Document.getInitialProps(ctx);
-    const incoming = {};
     const podlets = await Promise.all([
-      podletA.fetch(incoming),
-      podletB.fetch(incoming),
-      podletC.fetch(incoming),
+      podletA.fetch(),
+      podletB.fetch(),
+      podletC.fetch(),
     ]);
 
     return { ...initialProps, podlets };
