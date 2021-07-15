@@ -1,6 +1,7 @@
 import Document, { Html, Head, Main, NextScript } from "next/document";
 import Layout from "@podium/layout";
 import utils from "@podium/utils";
+import parse from "html-react-parser";
 
 const layout = new Layout({
   name: "Layout",
@@ -48,13 +49,19 @@ class MyDocument extends Document {
 
     const css = podlets.map((podlet) => {
       if (Object.keys(podlet.css).length !== 0) {
-        return utils.buildLinkElement(podlet.css[0]);
+        return parse(utils.buildLinkElement(podlet.css[0]));
       }
     });
 
     const js = podlets.map((podlet) => {
       if (Object.keys(podlet.js).length !== 0) {
-        return utils.buildScriptElement(podlet.js[0]);
+        return parse(utils.buildScriptElement(podlet.js[0]));
+      }
+    });
+
+    const content = podlets.map((podlet) => {
+      if (Object.keys(podlet.js).length !== 0) {
+        return parse(podlet.content);
       }
     });
 
@@ -63,14 +70,9 @@ class MyDocument extends Document {
         <Head>{css}</Head>
         <body>
           <Main />
-          <section>
-            <div id="podlet-a"></div>
-            {podlets[0].content}
-            {podlets[1].content}
-            {podlets[2].content}
-          </section>
-          <NextScript />
+          <section>{content}</section>
           {js}
+          <NextScript />
         </body>
       </Html>
     );
