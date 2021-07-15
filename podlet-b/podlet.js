@@ -12,7 +12,7 @@ const podlet = new Podlet({
 });
 
 const app = express();
-app.use(cors({ origin: 'http://localhost:7000' }));
+app.use(cors({ origin: 'http://localhost:3000' }));
 
 app.use('/build/dist', express.static('./build/dist'));
 
