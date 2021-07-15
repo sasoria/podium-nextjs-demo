@@ -1,7 +1,8 @@
 import Document, { Html, Head, Main, NextScript } from "next/document";
 import Layout from "@podium/layout";
-import utils from "@podium/utils";
 import parse from "html-react-parser";
+import { parseCssAssetsToReactHtml } from "../src/utils";
+import { parseJsAssetsToReactHtml } from "../src/utils";
 
 const layout = new Layout({
   name: "Layout",
@@ -13,22 +14,16 @@ const layout = new Layout({
 const podletA = layout.client.register({
   name: "podlet-a",
   uri: "http://localhost:7100/manifest.json",
-  resolveJs: true,
-  resolveCss: true,
 });
 
 const podletB = layout.client.register({
   name: "podlet-b",
   uri: "http://localhost:7200/manifest.json",
-  resolveJs: true,
-  resolveCss: true,
 });
 
 const podletC = layout.client.register({
   name: "podlet-c",
   uri: "http://localhost:7300/manifest.json",
-  resolveJs: true,
-  resolveCss: true,
 });
 
 class MyDocument extends Document {
@@ -45,31 +40,19 @@ class MyDocument extends Document {
 
   render() {
     const podlets = this.props.podlets;
-
-    const css = podlets.map((podlet) => {
-      if (Object.keys(podlet.css).length !== 0) {
-        return parse(utils.buildLinkElement(podlet.css[0]));
-      }
-    });
-
-    const js = podlets.map((podlet) => {
-      if (Object.keys(podlet.js).length !== 0) {
-        return parse(utils.buildScriptElement(podlet.js[0]));
-      }
-    });
-
-    const content = podlets.map((podlet) => {
-      if (Object.keys(podlet.js).length !== 0) {
-        return parse(podlet.content);
-      }
-    });
+    const css = parseCssAssetsToReactHtml(podlets);
+    const js = parseJsAssetsToReactHtml(podlets);
 
     return (
       <Html>
         <Head>{css}</Head>
         <body>
           <Main />
-          <section>{content}</section>
+          <section>
+            {parse(podlets[0].content)}
+            {parse(podlets[1].content)}
+            {parse(podlets[2].content)}
+          </section>
           {js}
           <NextScript />
         </body>
